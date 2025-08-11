@@ -1,0 +1,8 @@
+john.doe@example.com
+jane.smith@example.org
+contact@company.net
+support@service.com
+user123@gmail.com
+test.email@domain.co
+hello@world.io
+info@website.ai
