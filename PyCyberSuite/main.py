@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from threading import Thread
+import tkinter as tk
+from tkinter import ttk, messagebox, filedialog
+from threading import Thread
 import schedule
 import time
 import json
@@ -17,50 +20,70 @@ from modules.dictionary_attack import DictionaryAttack
 from modules.subdomain_file import SubdomainEnumerator
 
 
-"""
-CyberSuite is the main GUI application for the cybersecurity toolkit.
-It integrates authentication, scanning, password checking, encryption, brute force, dictionary attack, automation, and reporting tools.
-"""
+# CyberSuite is the main GUI application for the cybersecurity toolkit.
+# It integrates authentication, scanning, password checking, encryption, brute force, dictionary attack, automation, and reporting tools.
+#
+# UI is styled like a hacker console: neon green on black, monospace font, grid layout for tools.
+#
+# Keyboard handling: currently, all actions are triggered by button clicks. You can add keyboard shortcuts using self.root.bind().
+
+
 class CyberSuite:
     def __init__(self):
+        # Initialize the main window and hacking-style theme
         """
         Initialize the CyberSuite GUI, configure styles, and set up all modules.
         """
-        self.root = tk.Tk()
-        self.root.title("CyberSuite Toolkit")
-        self.root.geometry("900x700")
-        self.root.configure(bg="black")
+        self.root = tk.Tk()  # Create main window
+        self.root.title("PyCyberSuite - [Hacker Console]")  # Set window title
+        self.root.geometry("950x750")  # Set window size
+        self.root.configure(bg="#101010")  # Set background color
 
-        # Set ttk style for dark theme
+        # Set ttk style for hacking theme
+    # Set ttk style for hacking theme (neon green, monospace)
         style = ttk.Style()
         style.theme_use('clam')
-        style.configure('.', background='black', foreground='white')
-        style.configure('TLabel', background='black', foreground='white')
-        style.configure('TButton', background='black', foreground='green')
-        style.configure('TEntry', fieldbackground='black', foreground='red')
-        style.configure('TFrame', background='black')
-        style.configure('TLabelframe', background='black', foreground='white')
-        style.configure('TLabelframe.Label', background='black', foreground='white')
+        style.configure('.', background='#101010', foreground='#39ff14', font=('Consolas', 11))
+        style.configure('TLabel', background='#101010', foreground='#39ff14', font=('Consolas', 14, 'bold'))
+        style.configure('TButton', background='#101010', foreground='#39ff14', font=('Consolas', 12, 'bold'), borderwidth=2, focusthickness=3)
+        style.map('TButton', background=[('active', '#222'), ('pressed', '#222')], foreground=[('active', '#00ffea')])
+        style.configure('TEntry', fieldbackground='#222', foreground='#39ff14', font=('Consolas', 12))
+        style.configure('TFrame', background='#101010')
+        style.configure('TLabelframe', background='#101010', foreground='#39ff14', font=('Consolas', 13, 'bold'))
+        style.configure('TLabelframe.Label', background='#101010', foreground='#39ff14', font=('Consolas', 13, 'bold'))
 
-        # Initialize tools
+    # Custom title bar (simple)
+    # Custom title bar for hacker look
+        title_bar = tk.Frame(self.root, bg='#101010', relief='raised', bd=0)
+        title_bar.pack(fill=tk.X)
+        logo = tk.Label(title_bar, text='[💻]', fg='#39ff14', bg='#101010', font=('Consolas', 16, 'bold'))
+        logo.pack(side=tk.LEFT, padx=10)
+        title = tk.Label(title_bar, text='PyCyberSuite - Hacker Console', fg='#39ff14', bg='#101010', font=('Consolas', 16, 'bold'))
+        title.pack(side=tk.LEFT, padx=5)
+        close_btn = tk.Button(title_bar, text='✖', fg='#39ff14', bg='#101010', font=('Consolas', 14, 'bold'), bd=0, command=self.root.quit, activebackground='#222', activeforeground='#ff0055')
+        close_btn.pack(side=tk.RIGHT, padx=10)
+    
+            # Initialize tools
+            # Initialize all tool modules
         try:
-            self.auth = AuthSystem()
-            self.net_scanner = NetworkScanner()
-            self.wordlist = self.load_wordlist("data/wordlists/sub_wordlist.txt")
-            self.report_gen = ReportGenerator()
-            self.symmetric_crypto = SymmetricEncryption()
-            self.auto_running = False
+                self.auth = AuthSystem()  # Authentication system
+                self.net_scanner = NetworkScanner()  # Network scanner
+                self.wordlist = self.load_wordlist("data/wordlists/sub_wordlist.txt")  # Wordlist for subdomain scanner
+                self.report_gen = ReportGenerator()  # Report generator
+                self.symmetric_crypto = SymmetricEncryption()  # Symmetric encryption
+                self.auto_running = False  # Automation flag
         except Exception as e:
-            messagebox.showerror(
-                "Initialization Error", f"Failed to initialize tools: {str(e)}"
-            )
-            self.root.destroy()
-            return
-
-        # Start with login
+                messagebox.showerror(
+                    "Initialization Error", f"Failed to initialize tools: {str(e)}"
+                )
+                self.root.destroy()
+                return
+    
+        # Start with login screen
         self.show_login()
 
     def load_wordlist(self, filename):
+        # Loads a wordlist from file for subdomain enumeration
         """
         Load a wordlist from a file for subdomain enumeration.
         """
@@ -75,6 +98,7 @@ class CyberSuite:
             return []
 
     def clear_window(self):
+        # Removes all widgets from the main window (used to switch screens)
         """
         Remove all widgets from the main window.
         """
@@ -82,28 +106,30 @@ class CyberSuite:
             widget.destroy()
 
     def show_login(self):
+        # Displays the login screen for user authentication
         """
         Display the login screen for user authentication.
         """
         self.clear_window()
         frame = ttk.Frame(self.root, padding=30, style='TFrame')
         frame.pack(expand=True)
-        ttk.Label(frame, text="CyberSuite Login", font=("Arial", 25), style='TLabel').grid(row=0, columnspan=2, pady=20)
-        ttk.Label(frame, text="Username:", font=("Times new roman", 16),  style='TLabel').grid(row=1, column=0, sticky="e", pady=5)
-        self.username_entry = ttk.Entry(frame, style='TEntry')
+        ttk.Label(frame, text="CyberSuite Login", font=("Consolas", 25, "bold"), style='TLabel').grid(row=0, columnspan=2, pady=20)
+        ttk.Label(frame, text="Username:", font=("Consolas", 16, "bold"),  style='TLabel').grid(row=1, column=0, sticky="e", pady=5)
+        self.username_entry = ttk.Entry(frame, style='TEntry')  # Username input
         self.username_entry.grid(row=1, column=1, pady=5, padx=5)
-        ttk.Label(frame, text="Password:",font=("Times new roman", 16), style='TLabel').grid(row=2, column=0, sticky="e", pady=5)
-        self.password_entry = ttk.Entry(frame, show="*", style='TEntry')
+        ttk.Label(frame, text="Password:",font=("Consolas", 16, "bold"), style='TLabel').grid(row=2, column=0, sticky="e", pady=5)
+        self.password_entry = ttk.Entry(frame, show="*", style='TEntry')  # Password input
         self.password_entry.grid(row=2, column=1, pady=5, padx=5)
-        btn_frame = ttk.Frame(frame, style='TFrame')
+        btn_frame = ttk.Frame(frame, style='TFrame')  # Button area
         btn_frame.grid(row=3, columnspan=2, pady=20)
-        ttk.Button(btn_frame, text="Login", command=self.attempt_login, style='TButton').pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="Exit", command=self.root.quit, style='TButton').pack(side=tk.LEFT, padx=5)
-        self.status_label = ttk.Label(frame, text="", foreground="white", style='TLabel')
+        ttk.Button(btn_frame, text="Login", command=self.attempt_login, style='TButton').pack(side=tk.LEFT, padx=5)  # Login button
+        ttk.Button(btn_frame, text="Exit", command=self.root.quit, style='TButton').pack(side=tk.LEFT, padx=5)  # Exit button
+        self.status_label = ttk.Label(frame, text="", foreground="#39ff14", style='TLabel')  # Status message
         self.status_label.grid(row=4, columnspan=2)
         self.username_entry.focus()
 
     def attempt_login(self):
+        # Handles login logic when user clicks Login
         """
         Attempt to log in with the provided username and password.
         """
@@ -116,33 +142,60 @@ class CyberSuite:
 
         try:
             if self.auth.verify_login(username, password):
-                self.show_main_menu()
+                self.show_main_menu()  # Show main menu if login successful
             else:
-                self.status_label.config(text="Invalid credentials")
+                self.status_label.config(text="Invalid credentials")  # Show error if login fails
         except Exception as e:
             self.status_label.config(text="Login failed")
 
     def show_main_menu(self):
+        # Displays the main menu with all available cybersecurity tools in a grid layout
         """
-        Display the main menu with all available cybersecurity tools.
+        Display the main menu with all available cybersecurity tools in a refined hacking-style layout.
         """
         self.clear_window()
-        frame = ttk.Frame(self.root, padding=30, style='TFrame')
+        frame = ttk.Frame(self.root, padding=40, style='TFrame')
         frame.pack(expand=True)
-        ttk.Label(frame, text="CyberSuite Tools", font=("Arial", 16), style='TLabel').pack(pady=20)
+    # Section header (hacker style)
+        ttk.Label(frame, text="[ PyCyberSuite - Hacker Console ]", font=("Consolas", 22, "bold"), style='TLabel').pack(pady=(10, 30))
+        # Divider
+        divider = ttk.Separator(frame, orient='horizontal')  # Divider line
+        divider.pack(fill=tk.X, padx=20, pady=(0, 30))
+        # Menu area - grid layout for hacking console look
+        menu_frame = ttk.Frame(frame, style='TFrame')  # Menu area for tool buttons
+        menu_frame.pack(expand=True)
         tools = [
-            ("Network Scanner", self.show_network_scanner),
-            ("Subdomain Scanner", self.show_subdomain_scanner),
-            ("Password Checker", self.show_password_checker),
-            ("Encryption Tools", self.show_crypto_tools),
-            ("Brute Force Simulator", self.show_brute_force),
-            ("Dictionary Attack", self.show_dictionary_attack),
-            ("Automation", self.show_automation),
-            ("Generate Report", self.generate_report),
-            ("Logout", self.show_login),
+            ("[1] Network Scanner", self.show_network_scanner),
+            ("[2] Subdomain Scanner", self.show_subdomain_scanner),
+            ("[3] Password Checker", self.show_password_checker),
+            ("[4] Encryption Tools", self.show_crypto_tools),
+            ("[5] Brute Force Simulator", self.show_brute_force),
+            ("[6] Dictionary Attack", self.show_dictionary_attack),
+            ("[7] Automation", self.show_automation),
+            ("[8] Generate Report", self.generate_report),
+            ("[9] Logout", self.show_login),
         ]
-        for text, cmd in tools:
-            ttk.Button(frame, text=text, command=cmd, width=20, style='TButton').pack(pady=5)
+        # Arrange buttons in a grid (3 columns) for hacking console look
+        cols = 3
+        for idx, (text, cmd) in enumerate(tools):
+            row, col = divmod(idx, cols)
+            btn = ttk.Button(menu_frame, text=text, command=cmd, style='TButton')
+            btn.grid(row=row, column=col, padx=30, pady=18, sticky="ew")  # Tool button
+        # Make columns expand equally
+        for c in range(cols):
+            menu_frame.grid_columnconfigure(c, weight=1)
+
+        # Example keyboard shortcut: press Escape to logout
+            self.root.bind('<Escape>', lambda event: self.show_login())
+            ("[2] Subdomain Scanner", self.show_subdomain_scanner),
+            ("[3] Password Checker", self.show_password_checker),
+            ("[4] Encryption Tools", self.show_crypto_tools),
+            ("[5] Brute Force Simulator", self.show_brute_force),
+            ("[6] Dictionary Attack", self.show_dictionary_attack),
+            ("[7] Automation", self.show_automation),
+            ("[8] Generate Report", self.generate_report),
+            ("[9] Logout", self.show_login),
+        
 
     # Network Scanner Methods
     def show_network_scanner(self):
@@ -162,7 +215,7 @@ class CyberSuite:
         ttk.Label(input_frame, text="Target:").pack(side=tk.LEFT)
         self.net_target_entry = ttk.Entry(input_frame)
         self.net_target_entry.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
-        self.net_target_entry.insert(0, "192.168.1.1/24")
+        self.net_target_entry.insert(0, "192.168.56.1/24")
 
         ttk.Button(frame, text="Start Scan", command=self.start_network_scan).pack(
             pady=10
@@ -217,7 +270,7 @@ class CyberSuite:
         for host, ports in results.items():
             self.net_results.insert(tk.END, f"\nHost: {host}\n")
             for port in ports:
-                self.net_results.insert(tk.END, f"• {port}\n")
+                self.net_results.insert(tk.END, f"• {port} open ports\n")
 
     # Subdomain Scanner Methods
     def show_subdomain_scanner(self):

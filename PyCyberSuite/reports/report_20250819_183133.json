@@ -1,0 +1,27 @@
+{
+    "generated": "2025-08-19 18:27:48.153324",
+    "results": {
+        "encryption_log": {
+            "time": "2025-08-19 18:29:50.134086",
+            "message": "",
+            "encrypted": "32189ab666b55af22aaa20e518aab3c17cb9ee837a5e69095fd2acf87fa38513772cbe42806649872c55de01bd58038c3e19803a98c9d39492f0d76b22bfe4258b0d249e32c10597373920a406fd4320355306a4cfff5d5eb1fb953eda1ee8cd56e019058f3a9f71fcdd986d64e06cc822936381acdad3e571d64baa4de92569448256746113b588b01ad44fb14572648a35fe41456c6346a44e029f80e847035ac5450ba75f51a1cb5a86600e976ece099266ed751bdaf3b2aa03be4e0cf30c898ff9beb452c4b69372e0fa2aac3e01b65e22f85009851628b35daf52856440a368aab04ca2326eb77ddfaaa0a724d27d82b3fee305cfae265c61561781f1ec",
+            "decrypted": "heloohg"
+        }
+    },
+    "network_scan": {
+        "time": "2025-08-19 18:31:05.170248",
+        "data": {
+            "192.168.56.1": [
+                "135/tcp",
+                "139/tcp",
+                "445/tcp",
+                "7070/tcp"
+            ]
+        }
+    },
+    "password_test": {
+        "password": "Hello123!",
+        "complexity": "Strong password",
+        "breach": "Found in breaches 40619 times!"
+    }
+}
