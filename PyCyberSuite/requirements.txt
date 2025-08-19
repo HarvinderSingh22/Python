@@ -1,0 +1,5 @@
+tkinter
+cryptography
+requests
+python-nmap
+schedule
