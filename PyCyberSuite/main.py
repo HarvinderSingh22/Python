@@ -212,14 +212,13 @@ class CyberSuite:
         input_frame = ttk.Frame(frame)
         input_frame.pack(fill=tk.X, pady=10)
 
-        ttk.Label(input_frame, text="Target:").pack(side=tk.LEFT)
-        self.net_target_entry = ttk.Entry(input_frame)
-        self.net_target_entry.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
-        self.net_target_entry.insert(0, "192.168.56.1/24")
+        # Show system IP instead of manual entry
+        ttk.Label(input_frame, text="System IP:").pack(side=tk.LEFT)
+        system_ip = self.net_scanner.get_local_ip()
+        self.net_ip_label = ttk.Label(input_frame, text=system_ip)
+        self.net_ip_label.pack(side=tk.LEFT, padx=5)
 
-        ttk.Button(frame, text="Start Scan", command=self.start_network_scan).pack(
-            pady=10
-        )
+        ttk.Button(frame, text="Start Scan", command=self.start_network_scan).pack(pady=10)
 
         self.net_results = tk.Text(frame, height=20)
         scrollbar = ttk.Scrollbar(frame, command=self.net_results.yview)
@@ -228,30 +227,22 @@ class CyberSuite:
         self.net_results.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        ttk.Button(frame, text="Back to Menu", command=self.show_main_menu).pack(
-            pady=10
-        )
+        ttk.Button(frame, text="Back to Menu", command=self.show_main_menu).pack(pady=10)
 
     def start_network_scan(self):
         """
-        Start a network scan for the specified target.
+        Start a network scan for the system's IP address automatically.
         """
-        target = self.net_target_entry.get().strip()
-        if not target:
-            messagebox.showwarning("Error", "Please enter a target")
-            return
-
         self.net_results.delete(1.0, tk.END)
         self.net_results.insert(tk.END, "Scanning...\n")
+        Thread(target=self.run_network_scan, daemon=True).start()
 
-        Thread(target=self.run_network_scan, args=(target,), daemon=True).start()
-
-    def run_network_scan(self, target):
+    def run_network_scan(self):
         """
         Run the network scan in a separate thread and display results.
         """
         try:
-            results = self.net_scanner.quick_scan(target)
+            results = self.net_scanner.quick_scan()
             self.root.after(0, self.display_network_results, results)
             self.report_gen.add_network_scan(results)
         except Exception as e:
@@ -788,10 +779,11 @@ class CyberSuite:
         self.net_scan_time.pack(side=tk.LEFT, padx=5)
         self.net_scan_time.insert(0, "01:08")
 
-        ttk.Label(net_frame, text="Target:").pack(side=tk.LEFT, padx=5)
-        self.net_scan_target = ttk.Entry(net_frame)
-        self.net_scan_target.pack(side=tk.LEFT, expand=True, fill=tk.X, padx=5)
-        self.net_scan_target.insert(0, "192.168.56.1")
+        # Show system IP instead of manual target entry
+        ttk.Label(net_frame, text="System IP:").pack(side=tk.LEFT, padx=5)
+        system_ip = self.net_scanner.get_local_ip()
+        self.net_scan_ip_label = ttk.Label(net_frame, text=system_ip)
+        self.net_scan_ip_label.pack(side=tk.LEFT, padx=5)
 
         pw_frame = ttk.LabelFrame(frame, text="Password Check", padding=10)
         pw_frame.pack(fill=tk.X, pady=5)
@@ -824,16 +816,14 @@ class CyberSuite:
         self.auto_results.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        ttk.Button(frame, text="Back to Menu", command=self.show_main_menu).pack(
-            pady=10
-        )
+        ttk.Button(frame, text="Back to Menu", command=self.show_main_menu).pack(pady=10)
 
     def start_automation(self):
         """
         Start scheduled automation tasks for network scan and password check.
         """
         net_time = self.net_scan_time.get().strip()
-        net_target = self.net_scan_target.get().strip()
+        net_target = self.net_scanner.get_local_ip()
         pw_time = self.pw_check_time.get().strip()
         pw_password = self.pw_check_password.get().strip()
 

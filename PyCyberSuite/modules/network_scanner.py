@@ -4,17 +4,34 @@ It uses nmap to detect live hosts and open ports.
 Used for network reconnaissance in CyberSuite.
 """
 import nmap  # Import the nmap library for network scanning
+import socket  # For getting the system's IP address
 
 class NetworkScanner:
     def __init__(self):
         # Initialize the nmap PortScanner object
         self.scanner = nmap.PortScanner()
 
-    def quick_scan(self, target_ip: str) -> dict:
+    def get_local_ip(self):
         """
-        Perform a quick scan on the target IP address.
+        Get the local IP address of the system.
+        """
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            # Doesn't have to be reachable, just used to get the local IP
+            s.connect(('10.255.255.255', 1))
+            ip = s.getsockname()[0]
+        except Exception:
+            ip = '127.0.0.1'
+        finally:
+            s.close()
+        return ip
+
+    def quick_scan(self) -> dict:
+        """
+        Perform a quick scan on the system's local IP address.
         Returns a dictionary mapping each live host to its list of open ports.
         """
+        target_ip = self.get_local_ip()  # Get system IP automatically
         results = {}  # Dictionary to store scan results
         
         # First, perform a ping scan to find live hosts
