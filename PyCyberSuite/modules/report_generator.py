@@ -19,6 +19,7 @@ class ReportGenerator:
             "time": str(datetime.now()),
             "data": results
         }
+        
 
     def add_password_test(self, password, complexity, breach):
         # Add password test results to the report

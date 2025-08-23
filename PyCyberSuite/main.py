@@ -664,7 +664,7 @@ class CyberSuite:
                     0, lambda: self.bf_results.insert(tk.END, f"\nPassword not found after {attempts} attempts.\n")
                 )
         except Exception as e:
-            self.root.after(0, lambda: messagebox.showerror("Error", str(e)))
+            self.root.after(0, lambda e=e: messagebox.showerror("Error", str(e)))
 
     # Dictionary Attack Section
     def show_dictionary_attack(self):
@@ -757,7 +757,7 @@ class CyberSuite:
                 0, lambda: self.da_results.insert(tk.END, f"\nResult: {result}\n")
             )
         except Exception as e:
-            self.root.after(0, lambda: messagebox.showerror("Error", str(e)))
+            self.root.after(0, lambda e=e: messagebox.showerror("Error", str(e)))
 
     # Automation Section
     def show_automation(self):
@@ -865,7 +865,7 @@ class CyberSuite:
         Run automated network scan and display results.
         """
         try:
-            results = self.net_scanner.quick_scan(target)
+            results = self.net_scanner.quick_scan()
             self.root.after(
                 0,
                 lambda: self.auto_results.insert(

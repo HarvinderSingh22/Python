@@ -26,9 +26,10 @@ class AutomationModule:
     def schedule_tasks(self):
         schedule.every().day.at("01:08").do(self.run_network_scan)
         schedule.every().day.at("01:08:20").do(self.run_password_check)
-        print("[*] Scheduled: Network scan at 10:00, Password check at 11:00")
+        print("[*] Scheduled: Network scan at 01:08, Password check at 01:08:20")
         
     def run(self):
+
         while True:
             schedule.run_pending()
             time.sleep(1)
