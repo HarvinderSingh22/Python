@@ -1,4 +1,3 @@
-tkinter
 cryptography
 requests
 python-nmap

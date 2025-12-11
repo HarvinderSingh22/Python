@@ -1,0 +1,22 @@
+{
+    "generated": "2025-12-03 09:16:38.999470",
+    "results": {
+        "encryption_log": {
+            "time": "2025-12-03 09:18:44.321852",
+            "message": "",
+            "encrypted": "66a451c4fdf6beb671240e3ecd08f4c39ad402b50313dfc1f09eee928ed51706438e3160b77ca27925ee2064ef21c25b7238ac762ed8f3812c30a140eddc2114e21977afe3135e3bc3501830e3fa663816cf5fbbee2a2b5026acc7c25cc1086e128bdcb0169ed67acfb8f511fb5224830e5ff004e0da46671d4d09d17ad8d34a8af4de7d490a07d1331eb6db2d3a2f068b0bf620775f9b1f2b3ef39c4a560ea004d7a158286d6fc3768698ba4832ed4be6c695837df77bf7c21837024afc3fea5001a1a77c7b062771ec2cac09f1ac9afb114c7c37b4bfbed54d3bf1046f283295578624a5a731873c995fba45826f506a8ac66dda41bbb3a7d7f17ce3cda1c8",
+            "decrypted": "fsdfsdsffdsf"
+        }
+    },
+    "network_scan": {
+        "time": "2025-12-03 09:16:58.835441",
+        "data": {
+            "10.88.121.117": [
+                "135/tcp",
+                "139/tcp",
+                "445/tcp",
+                "5357/tcp"
+            ]
+        }
+    }
+}
